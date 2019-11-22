@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CRobotApplicationMFCDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+    ON_BN_CLICKED(IDC_BUTTON_VISION_SOCKET_CONNECT, &CRobotApplicationMFCDlg::OnBnClickedButtonVisionSocketConnect)
 END_MESSAGE_MAP()
 
 
@@ -98,7 +99,7 @@ BOOL CRobotApplicationMFCDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	ShowWindow(SW_MAXIMIZE);
+	ShowWindow(SW_NORMAL);
 
 	// TODO: 在此添加额外的初始化代码
 
@@ -154,3 +155,9 @@ HCURSOR CRobotApplicationMFCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CRobotApplicationMFCDlg::OnBnClickedButtonVisionSocketConnect()
+{
+    // TODO: 在此添加控件通知处理程序代码
+}
