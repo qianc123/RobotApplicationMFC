@@ -6,6 +6,11 @@
 #include "RobotApplicationMFC.h"
 #include "RobotApplicationMFCDlg.h"
 #include "afxdialogex.h"
+#include "VisionControlDlg.h"
+#include "VisionConveyorSelectDlg.h"
+#include "VisionModeSelectDlg.h"
+#include "VisionCalibrationDlg.h"
+#include "VisionDetectionDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -65,6 +70,7 @@ BEGIN_MESSAGE_MAP(CRobotApplicationMFCDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
     ON_BN_CLICKED(IDC_BUTTON_VISION_SOCKET_CONNECT, &CRobotApplicationMFCDlg::OnBnClickedButtonVisionSocketConnect)
+    ON_BN_CLICKED(IDOK, &CRobotApplicationMFCDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -160,4 +166,90 @@ HCURSOR CRobotApplicationMFCDlg::OnQueryDragIcon()
 void CRobotApplicationMFCDlg::OnBnClickedButtonVisionSocketConnect()
 {
     // TODO: 在此添加控件通知处理程序代码
+    
+    //创建对话框实例并弹出对话框
+    EnWorkModel workModel = EnWorkModel::VP_Model_SelectConveyor;
+
+    VisionConveyorSelectDlg visionConveyorSelectDlg;
+    VisionModeSelectDlg visionModeSelectDlg;
+    VisionCalibrationDlg visionCalibrationDlg;
+    VisionDetectionDlg visionDetectionDlg;
+
+    EnConveyorColor conveyor = EnConveyorColor::VP_Color_Unknow;
+    EnVisionMode mode = EnVisionMode::VP_Vision_Unknow;
+    EnCalibrationMode calibration = EnCalibrationMode::VP_Calib_Unknow;
+    EnDetectionMode detection = EnDetectionMode::VP_Detection_Unknow;
+
+    do
+    {
+        switch (workModel)
+        {
+        case VP_Model_Unknow:
+            return;
+        case VP_Model_SelectConveyor:
+            visionConveyorSelectDlg.SelectedConveyor = EnConveyorColor::VP_Color_Unknow;
+            visionConveyorSelectDlg.DoModal();
+            conveyor = visionConveyorSelectDlg.SelectedConveyor;
+
+            switch (conveyor)
+            {
+            case VP_Color_White:
+                workModel = EnWorkModel::VP_Model_SelectVisionMode;
+                break;
+            case VP_Color_Green:
+                workModel = EnWorkModel::VP_Model_SelectVisionMode;
+                break;
+            default:
+                return;
+            }
+
+            break;
+        case VP_Model_SelectVisionMode:
+            visionModeSelectDlg.SelectedMode = EnVisionMode::VP_Vision_Unknow;
+            visionModeSelectDlg.DoModal();
+            mode = visionModeSelectDlg.SelectedMode;
+
+            switch (mode)
+            {
+            case VP_Vision_Calibration:
+                workModel = EnWorkModel::VP_Model_SetCalibrationMode;
+                break;
+            case VP_Vision_PolygonsDetection:
+                workModel = EnWorkModel::VP_Model_SetDetectionMode;
+                break;
+            case VP_Vision_Back:
+                workModel = EnWorkModel::VP_Model_SelectConveyor;
+                break;
+            default:
+                return;
+            }
+
+            break;
+        case VP_Model_SetCalibrationMode:
+            visionCalibrationDlg.DoModal();
+            workModel = EnWorkModel::VP_Model_SelectConveyor;
+            //设置为传送带模式
+            //.....
+            return;
+        case VP_Model_SetDetectionMode:
+            visionDetectionDlg.DoModal();
+            workModel = EnWorkModel::VP_Model_SelectConveyor;
+            //设置为传送带模式
+            //.....
+            return;
+        default:
+            return;
+        }
+
+    } while (true);
+
+
+
+}
+
+
+void CRobotApplicationMFCDlg::OnBnClickedOk()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    CDialogEx::OnOK();
 }

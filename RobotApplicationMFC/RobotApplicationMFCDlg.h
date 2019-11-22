@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "VisionDataTypeDef.h"
 
 // CRobotApplicationMFCDlg ¶Ô»°¿ò
 class CRobotApplicationMFCDlg : public CDialogEx
@@ -33,4 +33,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
     afx_msg void OnBnClickedButtonVisionSocketConnect();
+    afx_msg void OnBnClickedOk();
 };
